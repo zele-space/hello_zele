@@ -1,0 +1,43 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: organizations.orgs.zele.space
+spec:
+  group: orgs.zele.space
+  scope: Cluster
+  names:
+    plural: organizations
+    singular: organization
+    kind: Organization
+    shortNames:
+      - org
+  versions:
+    - name: v1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                namespace:
+                  type: string
+                labels:
+                  type: object
+                  additionalProperties:
+                    type: string
+            status:
+              type: object
+              properties:
+                namespaceCreated:
+                  type: boolean
+                observedNamespace:
+                  type: string
+                conditions:
+                  type: array
+                  items:
+                    type: object
+      subresources:
+        status: {}
