@@ -15,6 +15,8 @@ import (
 	orgsv1 "github.com/zele-space/hello_zele/api/v1"
 )
 
+const eventBufferSize = 16
+
 func TestOrganizationCreatesNamespace(t *testing.T) {
 	scheme := runtime.NewScheme()
 	_ = corev1.AddToScheme(scheme)
@@ -44,7 +46,7 @@ func TestOrganizationCreatesNamespace(t *testing.T) {
 	reconciler := &OrganizationReconciler{
 		Client:   cl,
 		Scheme:   scheme,
-		Recorder: record.NewFakeRecorder(16),
+		Recorder: record.NewFakeRecorder(eventBufferSize),
 	}
 
 	var fetched orgsv1.Organization
