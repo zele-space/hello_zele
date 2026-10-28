@@ -22,6 +22,12 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+      - name: Check game JavaScript
+        run: node --check bodori/game.js
+      - name: Verify game in desktop and mobile browsers
+        run: |
+          npm install --prefix "$RUNNER_TEMP/bodori-qa" --no-save playwright-core
+          BODORI_QA_MODULE="$RUNNER_TEMP/bodori-qa/node_modules/playwright-core" BODORI_CHROME="/usr/bin/google-chrome" node .github/scripts/bodori-browser-qa.cjs
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
         with:
