@@ -6,7 +6,8 @@ const LINES={
  china:['니하오… 고마 하이소!','워 아이… 아니, 비키라예!','중국어는 몰라도 눈치는 압니더!','셰셰? 아이다, 그만하라꼬!','이걸 중국말로 우째 하노…','말은 안 통해도 느낌 알겠제?'],
  senior:['너 몇 학번인데?','내가 왕년에 말이야…','잠깐만, 내 말 좀…','아, 귀에서 피 나겠다!','너 진짜 말 많다…','알았다! 간다, 간다고!','국밥 얘기는 왜 하는데?!','오늘은 그냥 넘어간다!'],
  women:['누가 구해달랬어?!','고마운데… 너무 시끄러워!','혼자 갈 수 있거든!','됐거든! 따라오지 마!','말 좀 줄이면 안 돼?!','선배보다 네가 더 말 많아!','다음엔 조용히 구해줘!','아, 진짜! 나 수업 늦었잖아!','구해준 건 알겠는데 귀가 아파!','됐어, 이제 나 좀 보내줘!'],
- junior:['행님! 한 판만 더 합시다!','형, 오늘 나랑 놀자!','노래방 딱 한 시간만!','형! 국밥 먹고 가요!','선배 말고 나랑 놀자니까!','형, 공강이잖아요!','피시방 자리 잡아놨어요!'],
+ junior:['보도리 선배, 밥 사주세요!','보도리 선배, 놀아주세요!','선배, 배고파요! 국밥 사주세요!','보도리 선배! 커피도 사주세요!','선배, 오늘 공강이죠? 저랑 놀아요!','선배에에! 딱 한 판만 같이 해주세요!','보도리 선배, 노래방 데려가 주세요!','선배, 피시방비도 내주시면 안 돼요?','선배! 밥 먹고 디저트도 사주세요!','보도리 선배, 저 심심해요!','선배, 과제 좀 도와주세요!','선배! 집에 가지 말고 저랑 놀아주세요!','선배, 저녁도 사주실 거죠?','보도리 선배! 술 한잔 사주세요!','선배, 어제도 바쁘다고 했잖아요!','선배에에, 대답할 때까지 따라갈 거예요!','보도리 선배, 맛있는 거 사주세요!','선배, 진희형 말고 저부터 놀아주세요!'],
+ juniorExit:['선배… 밥은 사주고 가세요!','알겠어요… 다음엔 꼭 놀아주세요!','선배! 커피 쿠폰이라도 주세요!','보도리 선배, 내일 또 따라갈 거예요!'],
  reject:['행님 오늘 바쁘다!','다음에 보자, 알겠제?','국밥은 나중에 묵자!','내 지금 사람 구하는 중이다!','고마 집에 가서 쉬라!'],
  confess:['선배… 내 진심입니더. 좋아합니더! ♥','마, 선배! 내랑 사귈랍니꺼? ♥','내가 선배 좋아한다 아입니꺼! ♥','선배, 국밥 같이 묵을래예? 평생. ♥'],
  coffee:['아아 한 잔이면 또 떠든다!','캬, 살아있네!','커피는 역시 수혈 아입니꺼!','국밥은 없나… 일단 이거라도!'],
@@ -28,7 +29,7 @@ function growthChoice(key){if(mode!=='growth'||!growth.pending||!['talk','grit',
 function showGrowth(){if(!running||!growth.pending)return;paused=true;mode='growth';keys={};held=false;joystick.x=joystick.y=0;target=null;$('#stick').style.transform='';$('#overlay').hidden=false;$('#overlay').innerHTML=`<div class="growth-card"><span class="start-kicker">LEVEL UP · LV. ${growth.level}</span><h2>말빨도 나이처럼 성장한다!</h2><p>기본 공격력·최대 체력이 올랐어요. 특성 하나를 더 골라보세요.</p><div class="growth-options"><button data-growth="talk" id="growTalk"><span>≋</span><b>부산 말빨</b><small>말 공격 기본 위력 +0.25<br>현재 ${growth.talk}회 강화</small></button><button data-growth="grit" id="growGrit"><span>♨</span><b>국밥 체력</b><small>최대 체력 +12 · 체력 +12<br>현재 ${growth.grit}회 강화</small></button><button data-growth="stride" id="growStride"><span>➜</span><b>동네 마당발</b><small>이동 속도 +8 · 사거리 +10<br>현재 ${growth.stride}회 강화</small></button></div><span class="start-hint">나이는 흐르고, 레벨은 쌓인다 · 남은 선택 ${growth.pending}회</span></div>`;$('#growTalk').onclick=()=>growthChoice('talk');$('#growGrit').onclick=()=>growthChoice('grit');$('#growStride').onclick=()=>growthChoice('stride');$('#growTalk').focus?.();}
 function dodge(){if(!running||paused||dodgeCD>0||poseTime>0)return;dodgeCD=3;dashTime=.22;invincible=.36;target=null;comboTime=Math.max(comboTime,1);bubble(player,'비키라예!','#dfefff',.7);beep('talk');}
 function hurt(amount){if(invincible>0||poseTime>0||fear>0)return;player.hp=Math.max(0,player.hp-amount);hitBlink=.18;combo=0;comboTime=0;}
-function defeatJunior(e){if(e.dead)return;e.dead=true;e.flee=2;gainXP(12);bubble(e,say('reject'),'#e5efff',1.4);}
+function defeatJunior(e){if(e.dead)return;e.dead=true;e.flee=2;gainXP(12);bubble(e,say('juniorExit'),'#e5efff',1.4);}
 function hitEnemy(e,damage){if(e.dead)return;e.hp=Math.max(0,e.hp-damage);e.stun=e.kind==='boss'?.08:.38;if(e.kind!=='boss')e.windup=0;floatText(e,'-'+damage.toFixed(1),'#fff3c5');burst(e.x,e.y-15,'#fff0b4',5);if(e.hp<=0){if(e.kind==='boss')defeatBoss();else if(e.kind==='senior')rescue(e);else defeatJunior(e);}else if(Math.random()<.28)bubble(e,stage===2?'听不懂…':say('senior'),'#fce3d8',1);}
 const W=1800,H=1280,spots=[[990,690],[590,750],[1290,650],[490,470],[1190,410],[1450,880],[780,980],[360,950],[1510,400],[800,260]];
 let saved=null;try{saved=JSON.parse(localStorage.getItem('bodori-adventure-v1'));if(!saved||!Number.isInteger(saved.stage)||saved.stage<0||saved.stage>3)saved=null;}catch{}
@@ -62,7 +63,7 @@ function attack(kind){
   if(!enemy||distance(enemy,player)>180){notify('겐세이는 가까운 상대에게! 조금 더 다가가세요.');return;}
   strongCD=30;const previous=pose?.id;let a=ANTICS[Math.floor(Math.random()*ANTICS.length)];if(a.id===previous)a=ANTICS[(ANTICS.indexOf(a)+1)%ANTICS.length];pose=a;poseTime=poseDuration=a.duration;invincible=Math.max(invincible,a.duration+.15);player.face=enemy.x>player.x?1:-1;movePlayer((enemy.x-player.x)*.45,(enemy.y-player.y)*.45);bubble(player,a.line,'#e6efb9',2);floatText(player,a.name,'#effcc5');burst(enemy.x,enemy.y,'#e7ec9c',24);rings.push({x:player.x,y:player.y,t:.5,max:.5,r:130,color:'#e3ed9c'});if(enemy.kind==='boss'){hitEnemy(enemy,Math.max(enemy.max*.25,attackPower()*8));bubble(enemy,'이게 무슨 짓이고?!','#f6ddc5',1.8);}else if(enemy.kind==='senior')rescue(enemy);else defeatJunior(enemy);beep('strong');save();return;
  }
- normalCD=.42;bubble(player,say(stage===2?'china':'talk'),'#fff8e4',.85);rings.push({x:player.x,y:player.y,t:.3,max:.3,r:attackRange(),color:'#fff5c3'});beep();
+ normalCD=.42;bubble(player,say(enemy?.kind==='junior'?'reject':stage===2?'china':'talk'),'#fff8e4',.85);rings.push({x:player.x,y:player.y,t:.3,max:.3,r:attackRange(),color:'#fff5c3'});beep();
  if(enemy&&distance(enemy,player)<attackRange()){
   combo=comboTime>0?combo+1:1;comboTime=2.5;comboBest=Math.max(comboBest,combo);const explosion=combo%5===0;hitEnemy(enemy,STAGES[stage].damage*attackPower()*(explosion?1.7:1));
   if(explosion){bubble(player,say('combo'),'#eff8bc',1.5);rings.push({x:player.x,y:player.y,t:.65,max:.65,r:180,color:'#dcf281'});for(const e of foes)if(e!==enemy&&!e.dead&&distance(e,player)<180)hitEnemy(e,STAGES[stage].damage*attackPower());}
