@@ -1,0 +1,35 @@
+name: Publish Bodori Adventure
+on:
+  push:
+    branches: [bodori-pages]
+    paths:
+      - 'bodori/**'
+      - '.github/workflows/bodori-pages.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: bodori-pages
+  cancel-in-progress: false
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+      - name: Upload game
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: bodori
+      - name: Deploy game
+        id: deployment
+        uses: actions/deploy-pages@v4
