@@ -13,13 +13,19 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: hello-zele-manager-role
-rules:
-  - apiGroups: [""]
-    resources: ["namespaces"]
-    verbs: ["get", "list", "watch", "create", "update", "patch"]
-  - apiGroups: ["orgs.zele.space"]
-    resources: ["organizations", "organizations/status", "organizations/finalizers"]
-    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  rules:
+    - apiGroups: [""]
+      resources: ["namespaces"]
+      verbs: ["get", "list", "watch", "create", "update", "patch"]
+    - apiGroups: [""]
+      resources: ["resourcequotas"]
+      verbs: ["get", "list", "watch", "create", "update", "patch"]
+    - apiGroups: ["orgs.zele.space"]
+      resources: ["organizations", "organizations/status", "organizations/finalizers"]
+      verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+    - apiGroups: ["orgs.zele.space"]
+      resources: ["groups", "groups/status", "groups/finalizers"]
+      verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding

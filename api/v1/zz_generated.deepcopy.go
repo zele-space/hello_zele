@@ -72,6 +72,96 @@ func (in *Organization) DeepCopyObject() runtime.Object {
 	return nil
 }
 
+func (in *GroupSpec) DeepCopyInto(out *GroupSpec) {
+	*out = *in
+	if in.Quotas != nil {
+		out.Quotas = make(map[string]string, len(in.Quotas))
+		for key, val := range in.Quotas {
+			out.Quotas[key] = val
+		}
+	}
+}
+
+func (in *GroupSpec) DeepCopy() *GroupSpec {
+	if in == nil {
+		return nil
+	}
+	out := new(GroupSpec)
+	in.DeepCopyInto(out)
+	return out
+}
+
+func (in *GroupStatus) DeepCopyInto(out *GroupStatus) {
+	*out = *in
+	if in.Conditions != nil {
+		out.Conditions = make([]metav1.Condition, len(in.Conditions))
+		for i := range in.Conditions {
+			in.Conditions[i].DeepCopyInto(&out.Conditions[i])
+		}
+	}
+}
+
+func (in *GroupStatus) DeepCopy() *GroupStatus {
+	if in == nil {
+		return nil
+	}
+	out := new(GroupStatus)
+	in.DeepCopyInto(out)
+	return out
+}
+
+func (in *Group) DeepCopyInto(out *Group) {
+	*out = *in
+	out.TypeMeta = in.TypeMeta
+	in.ObjectMeta.DeepCopyInto(&out.ObjectMeta)
+	in.Spec.DeepCopyInto(&out.Spec)
+	in.Status.DeepCopyInto(&out.Status)
+}
+
+func (in *Group) DeepCopy() *Group {
+	if in == nil {
+		return nil
+	}
+	out := new(Group)
+	in.DeepCopyInto(out)
+	return out
+}
+
+func (in *Group) DeepCopyObject() runtime.Object {
+	if c := in.DeepCopy(); c != nil {
+		return c
+	}
+	return nil
+}
+
+func (in *GroupList) DeepCopyInto(out *GroupList) {
+	*out = *in
+	out.TypeMeta = in.TypeMeta
+	in.ListMeta.DeepCopyInto(&out.ListMeta)
+	if in.Items != nil {
+		out.Items = make([]Group, len(in.Items))
+		for i := range in.Items {
+			in.Items[i].DeepCopyInto(&out.Items[i])
+		}
+	}
+}
+
+func (in *GroupList) DeepCopy() *GroupList {
+	if in == nil {
+		return nil
+	}
+	out := new(GroupList)
+	in.DeepCopyInto(out)
+	return out
+}
+
+func (in *GroupList) DeepCopyObject() runtime.Object {
+	if c := in.DeepCopy(); c != nil {
+		return c
+	}
+	return nil
+}
+
 // DeepCopyInto copies list.
 func (in *OrganizationList) DeepCopyInto(out *OrganizationList) {
 	*out = *in
