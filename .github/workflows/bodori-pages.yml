@@ -1,9 +1,10 @@
-name: Publish Bodori Adventure
+name: Publish Bodori Adventure and Novel Setup
 on:
   push:
     branches: [master]
     paths:
       - 'bodori/**'
+      - 'novel_setup.html'
       - '.github/workflows/bodori-pages.yml'
   workflow_dispatch:
 permissions:
@@ -32,10 +33,16 @@ jobs:
         uses: actions/configure-pages@v5
         with:
           enablement: true
-      - name: Upload game
+      - name: Prepare game and novel setup site
+        run: |
+          mkdir -p _site/novel
+          cp -a bodori/. _site/
+          cp novel_setup.html _site/novel/index.html
+          cp novel_setup.html _site/novel_setup.html
+      - name: Upload game and novel setup
         uses: actions/upload-pages-artifact@v3
         with:
-          path: bodori
+          path: _site
       - name: Deploy game
         id: deployment
         uses: actions/deploy-pages@v4
